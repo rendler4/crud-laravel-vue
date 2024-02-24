@@ -1,37 +1,63 @@
 <!-- resources/js/Pages/Employees/Create.vue -->
-<script setup>
-// import { usePage } from '@inertiajs/vue3';
+<script>
 import { useForm } from "@inertiajs/vue3";
 
-const form = useForm({
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone_number: '',
-    hire_date: '',
-    position: '',
-    department:'',
-    salary: '',
-    area_id: '',
-})  
+export default {
+  data() {
+    return {
+      form: useForm({
+        first_name: this?.employee?.first_name || '',
+        last_name: this?.employee?.last_name || '',
+        email: this?.employee?.email || '',
+        phone_number: this?.employee?.phone_number || '',
+        hire_date: this?.employee?.hire_date || '',
+        position: this?.employee?.position || '',
+        department:this?.employee?.department || '',
+        salary: this?.employee?.salary || '',
+        area_id: this?.employee?.area_id || '',
+    }),
+      isUpdate: false, // Indicador de modo de actualización
+      existingEmployee: {}, // Almacena los datos existentes si estamos en modo de actualización
+    };
+  },
+  props: {
+    employee: Object, // El array de empleados que se pasa desde el controlador de Laravel
+  },
+  mounted() {
+    // Lógica para cargar datos existentes si estamos en modo de actualización
+    this.checkUpdateMode();
+  },
+  methods: {
+    async checkUpdateMode() {
+      // Capturar el ID del empleado desde los parámetros de la ruta
+      // const employeeId = window.location.href.split('employees/').pop();
+      console.log({...this.employee})
+      this.form.defaults('first_name', this.employee.first_name)
+
+      // Lógica para determinar si estamos en modo de actualización
+      // const isUpdateMode = employeeId !== undefined;
+
+    //   if (isUpdateMode) {
+    //     form.defaults('email', 'updated-default@example.com')
+    //   }
+    },
+    async submitForm() {
+      // Lógica para enviar el formulario ya sea a la ruta de creación (store) o actualización (update)
+      try {
+        alert(this.employee)
+        this.employee === undefined ? this.form.post(route("employees.store")) : this.form.put(route("employees.update",this?.employee?.id), this.form);
   
-  
-const submitForm = ()=> {
-    // Aquí puedes enviar los datos del formulario al servidor (Laravel) para el proceso de inserción
-     console.log('Datos enviados:', form);
+        // const routeName = this.isUpdate ? 'employees.update' : 'employees.store';
+        // await this.$inertia.post(route(routeName), this.form);
 
-    //const { $inertia } = usePage();  
+        // Lógica adicional después de enviar el formulario (por ejemplo, redireccionar)
+      } catch (error) {
+        console.error('Error al enviar el formulario:', error);
+      }
+    },
+  },
+};
 
-
-    try {
-    form.post(route("employees.store"));
-    // Redireccionar a la página de lista de empleados después de la creación exitosa
-    //this.$inertia.visit(route('employees.index'));
-    } catch (error) {
-    // Manejar errores de la solicitud (puedes mostrar mensajes de error, etc.)
-    console.error('Error al enviar el formulario:', error);
-    }
-}
 
 </script>
 

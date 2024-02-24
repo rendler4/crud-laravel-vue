@@ -21,10 +21,11 @@ class EmployeeService
         return Employee::findOrFail($id);
     }
 
-    public function updateEmployee($id, $data)
+    public function updateEmployee($id, EmployeeRequest $request)
     {
         $employee = Employee::findOrFail($id);
-        $employee->update($data);
+
+        $employee->update($request->validated());
     }
 
     public function deleteEmployee($id)

@@ -47,7 +47,7 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $employee = $this->employeeService->getEmployeeById($id);
-        return Inertia::render('Employees/Edit', [
+        return Inertia::render('Employees/Create', [
             'employee' => $employee,
         ]);
     }

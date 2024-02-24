@@ -22,9 +22,12 @@
                 <td class="py-2 px-4 border-b">{{ employee.last_name }}</td>
                 <td class="py-2 px-4 border-b">
                     <div class="mt-4">
-                        <button @click="editEmployee(employee.id)" class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">
+                        <!-- <button @click="editEmployee(employee.id)" class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">
                             Editar
-                        </button>
+                        </button> -->
+                        <Link :href="route('employees.edit',employee.id)"
+                        class="px-4 py-2 text-white bg-blue-600 rounded-lg" >Edit</Link
+                    >
                         <button @click="deleteEmployee(employee.id)" class="bg-red-500 text-white px-4 py-2 rounded-md">
                             Eliminar
                         </button>
@@ -41,7 +44,10 @@
 </template>
 
 <script>
-import { Link } from '@inertiajs/vue3';
+
+import { Link, useForm } from '@inertiajs/vue3';
+
+
 export default {
   components: {
     Link,
@@ -50,13 +56,21 @@ export default {
     employees: Array, // El array de empleados que se pasa desde el controlador de Laravel
   },
   methods: {
-    editEmployee(employeeId) {
-      // Lógica para editar un empleado (puedes redirigir a la página de edición, etc.)
-      console.log('Editar empleado con ID:', employeeId);
-    },
-    deleteEmployee(employeeId) {
+    async deleteEmployee(employeeId) {
       // Lógica para eliminar un empleado (puedes mostrar un modal de confirmación, realizar una solicitud DELETE, etc.)
       console.log('Eliminar empleado con ID:', employeeId);
+
+        if (confirm('¿Estás seguro de que deseas eliminar este empleado?')) {
+            try {
+                await useForm({}).delete(route('employees.destroy', { employee: employeeId }),{
+                    onFinish: () => alert('employee delete succesfull'),
+                });
+
+            } catch (error) {
+            // Manejar errores de la solicitud (puedes mostrar mensajes de error, etc.)
+            console.error('Error al eliminar el empleado:', error);
+            }
+      }
     },
   },
 };

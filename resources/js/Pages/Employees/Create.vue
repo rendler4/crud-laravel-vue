@@ -44,7 +44,6 @@ export default {
     async submitForm() {
       // Lógica para enviar el formulario ya sea a la ruta de creación (store) o actualización (update)
       try {
-        alert(this.employee)
         this.employee === undefined ? this.form.post(route("employees.store")) : this.form.put(route("employees.update",this?.employee?.id), this.form);
   
         // const routeName = this.isUpdate ? 'employees.update' : 'employees.store';
@@ -169,7 +168,7 @@ export default {
           </div>
 
           <div>
-            <button type="submit" class="bg-blue-500 text-white p-2 rounded-md">Create Employee</button>
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded-md">{{ this.employee === undefined ? 'Create' : 'Update' }} Employee</button>
           </div>
         </form>
       </div>

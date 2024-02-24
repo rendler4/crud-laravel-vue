@@ -22,11 +22,13 @@ return new class extends Migration
             $table->string('department');
             $table->decimal('salary', 10, 2);
             $table->timestamps();
+
+            // Agregamos la relación con la entidad "Área"
+            $table->unsignedBigInteger('area_id');
+            $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
         });
 
-         // Agregamos la relación con la entidad "Área"
-         $table->unsignedBigInteger('area_id');
-         $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
+      
     }
 
     /**

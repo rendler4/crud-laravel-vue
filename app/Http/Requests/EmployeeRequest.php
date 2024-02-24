@@ -23,6 +23,7 @@ class EmployeeRequest extends FormRequest
             'position' => 'required',            
             'department' => 'required',            
             'salary' => 'required',            
+            'area_id' => 'required',            
             // Agrega más reglas según tus necesidades
         ];
     }
